@@ -34,7 +34,7 @@ namespace Monetrixa.ChallengeApp.Infrastructure.Persistence.Configurations
             builder.HasOne(x => x.PublishedContent)
                 .WithMany(x => x.DailyValidations)
                 .HasForeignKey(x => x.PublishedContentId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasIndex(x => new { x.UserId, x.ChallengeDayId })
                 .IsUnique();
