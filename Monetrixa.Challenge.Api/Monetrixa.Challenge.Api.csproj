@@ -10,4 +10,15 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Monetrixa.Challenge.Application\Monetrixa.Challenge.Application.csproj" />
+    <ProjectReference Include="..\Monetrixa.Challenge.Infrastructure\Monetrixa.Challenge.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+    <Folder Include="Configurations\" />
+    <Folder Include="Middlewares\" />
+  </ItemGroup>
+
 </Project>

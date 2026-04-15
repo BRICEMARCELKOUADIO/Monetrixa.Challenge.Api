@@ -1,3 +1,11 @@
 <Solution>
+  <Folder Name="/.github/" />
+  <Folder Name="/.github/workflows/">
+    <File Path="ci.yml" />
+  </Folder>
   <Project Path="Monetrixa.Challenge.Api/Monetrixa.Challenge.Api.csproj" />
+  <Project Path="Monetrixa.Challenge.Application/Monetrixa.Challenge.Application.csproj" />
+  <Project Path="Monetrixa.Challenge.Domain/Monetrixa.Challenge.Domain.csproj" />
+  <Project Path="Monetrixa.Challenge.Infrastructure/Monetrixa.Challenge.Infrastructure.csproj" />
+  <Project Path="Monetrixa.Challenge.Tests/Monetrixa.Challenge.Tests.csproj" />
 </Solution>

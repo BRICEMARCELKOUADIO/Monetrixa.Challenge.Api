@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.201
+
+      - name: Restore
+        run: dotnet restore Monetrixa.Challenge.Api.sln
+
+      - name: Build
+        run: dotnet build Monetrixa.Challenge.Api.sln --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test Monetrixa.Challenge.Api.sln --no-build --configuration Release
