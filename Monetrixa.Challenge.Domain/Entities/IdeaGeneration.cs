@@ -5,20 +5,20 @@ using System.Text;
 
 namespace Monetrixa.ChallengeApp.Domain.Entities
 {
-    public class DailyValidation
+    public class IdeaGeneration
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public Guid ChallengeDayId { get; set; }
-        public Guid? PublishedContentId { get; set; }
 
-        public ValidationStatus Status { get; set; } = ValidationStatus.Pending;
-        public string? Note { get; set; }
-        public DateTime? SubmittedAtUtc { get; set; }
-        public DateTime? ValidatedAtUtc { get; set; }
+        public string Topic { get; set; } = string.Empty;
+        public MoodType Mood { get; set; }
+        public PlatformType Platform { get; set; }
+        public string PromptUsed { get; set; } = string.Empty;
+        public DateTime CreatedAtUtc { get; set; }
 
         public User User { get; set; } = null!;
         public ChallengeDay ChallengeDay { get; set; } = null!;
-        public PublishedContent? PublishedContent { get; set; }
+        public ICollection<GeneratedIdea> GeneratedIdeas { get; set; } = new List<GeneratedIdea>();
     }
 }
