@@ -1,4 +1,4 @@
-﻿namespace Monetrixa.Challenge.Tests
+﻿namespace Monetrixa.ChallengeApp.Tests
 {
     public class UnitTest1
     {

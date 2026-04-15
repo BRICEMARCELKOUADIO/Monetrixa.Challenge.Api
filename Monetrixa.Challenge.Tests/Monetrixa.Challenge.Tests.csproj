@@ -5,6 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <RootNamespace>Monetrixa.ChallengeApp.Tests</RootNamespace>
+    <AssemblyName>Monetrixa.ChallengeApp.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

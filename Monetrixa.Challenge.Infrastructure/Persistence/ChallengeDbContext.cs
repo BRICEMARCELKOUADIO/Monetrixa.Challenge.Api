@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Monetrixa.Challenge.Domain.Entities;
+using Monetrixa.ChallengeApp.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using System.Text;
 
-namespace Monetrixa.Challenge.Infrastructure.Persistence
+namespace Monetrixa.ChallengeApp.Infrastructure.Persistence
 {
     public class ChallengeDbContext : DbContext
     {
@@ -15,7 +15,7 @@ namespace Monetrixa.Challenge.Infrastructure.Persistence
         }
 
         public DbSet<User> Users => Set<User>();
-        //public DbSet<Challenge> Challenges => Set<Challenge>();
+        public DbSet<Challenge> Challenges => Set<Challenge>();
         public DbSet<UserChallenge> UserChallenges => Set<UserChallenge>();
         public DbSet<ChallengeDay> ChallengeDays => Set<ChallengeDay>();
         public DbSet<DailyValidation> DailyValidations => Set<DailyValidation>();

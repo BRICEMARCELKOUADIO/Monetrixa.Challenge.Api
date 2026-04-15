@@ -1,9 +1,9 @@
-﻿using Monetrixa.Challenge.Domain.Enums;
+﻿using Monetrixa.ChallengeApp.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Monetrixa.Challenge.Domain.Entities
+namespace Monetrixa.ChallengeApp.Domain.Entities
 {
     public class Notification
     {

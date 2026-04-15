@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Monetrixa.Challenge.Domain.Enums
+namespace Monetrixa.ChallengeApp.Domain.Enums
 {
     public enum ValidationStatus
     {

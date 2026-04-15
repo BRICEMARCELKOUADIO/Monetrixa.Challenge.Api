@@ -4,6 +4,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RootNamespace>Monetrixa.ChallengeApp.Domain</RootNamespace>
+    <AssemblyName>Monetrixa.ChallengeApp.Domain</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
