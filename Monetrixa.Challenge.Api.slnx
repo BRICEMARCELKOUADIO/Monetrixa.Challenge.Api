@@ -3,9 +3,6 @@
   <Folder Name="/.github/workflows/">
     <File Path="ci.yml" />
   </Folder>
-  <Folder Name="/Éléments de solution/">
-    <File Path="global.json" />
-  </Folder>
   <Project Path="Monetrixa.Challenge.Api/Monetrixa.Challenge.Api.csproj" />
   <Project Path="Monetrixa.Challenge.Application/Monetrixa.Challenge.Application.csproj" />
   <Project Path="Monetrixa.Challenge.Domain/Monetrixa.Challenge.Domain.csproj" />
