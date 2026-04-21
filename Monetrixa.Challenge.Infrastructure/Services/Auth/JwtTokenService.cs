@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Monetrixa.ChallengeApp.Application.DTOs.Auth;
-using Monetrixa.ChallengeApp.Application.Interfaces;
+using Monetrixa.ChallengeApp.Application.Interfaces.Auth;
 using Monetrixa.ChallengeApp.Domain.Entities;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

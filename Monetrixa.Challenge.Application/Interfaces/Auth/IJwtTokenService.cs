@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Monetrixa.ChallengeApp.Application.Interfaces
+namespace Monetrixa.ChallengeApp.Application.Interfaces.Auth
 {
     public interface IJwtTokenService
     {
