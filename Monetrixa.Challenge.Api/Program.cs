@@ -3,9 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Monetrixa.ChallengeApp.Application.DTOs.Auth;
-using Monetrixa.ChallengeApp.Application.Interfaces;
+using Monetrixa.ChallengeApp.Application.Interfaces.Auth;
+using Monetrixa.ChallengeApp.Application.Interfaces.Common;
 using Monetrixa.ChallengeApp.Infrastructure.Persistence;
 using Monetrixa.ChallengeApp.Infrastructure.Services.Auth;
+using Monetrixa.ChallengeApp.Infrastructure.Services.Common;
 using Scalar.AspNetCore;
 using System.Text;
 
@@ -56,6 +58,8 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<PasswordService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 var app = builder.Build();
 

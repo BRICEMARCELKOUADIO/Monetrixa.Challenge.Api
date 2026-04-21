@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Monetrixa.ChallengeApp.Application.DTOs.Auth;
-using Monetrixa.ChallengeApp.Application.Interfaces;
+using Monetrixa.ChallengeApp.Application.Interfaces.Auth;
 
 namespace Monetrixa.ChallengeApp.Api.Controllers;
 
