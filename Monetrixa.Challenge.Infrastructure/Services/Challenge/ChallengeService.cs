@@ -112,4 +112,126 @@ public class ChallengeService : IChallengeService
             EndDateUtc = challenge.EndDateUtc
         };
     }
+
+    public async Task<CurrentChallengeDaysResponse> GetMyChallengeDaysAsync(
+    CancellationToken cancellationToken = default)
+    {
+        var userId = _currentUserService.UserId;
+
+        if (userId is null || userId == Guid.Empty)
+        {
+            throw new UnauthorizedAccessException("Utilisateur non authentifié.");
+        }
+
+        var userChallenge = await _dbContext.UserChallenges
+            .Include(x => x.Challenge)
+            .Where(x => x.UserId == userId.Value)
+            .OrderByDescending(x => x.JoinedAtUtc)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (userChallenge is null)
+        {
+            throw new InvalidOperationException("Aucun challenge rejoint pour cet utilisateur.");
+        }
+
+        var challengeId = userChallenge.ChallengeId;
+
+        var validations = await _dbContext.DailyValidations
+            .Where(x => x.UserId == userId.Value)
+            .Select(x => x.ChallengeDayId)
+            .ToListAsync(cancellationToken);
+
+        var days = await _dbContext.ChallengeDays
+            .Where(x => x.ChallengeId == challengeId)
+            .OrderBy(x => x.DayNumber)
+            .Select(x => new ChallengeDayResponse
+            {
+                ChallengeDayId = x.Id,
+                DayNumber = x.DayNumber,
+                WeekNumber = x.WeekNumber,
+                Theme = x.Theme,
+                Quote = x.Quote,
+                IsValidated = validations.Contains(x.Id)
+            })
+            .ToListAsync(cancellationToken);
+
+        return new CurrentChallengeDaysResponse
+        {
+            ChallengeId = userChallenge.Challenge.Id,
+            Title = userChallenge.Challenge.Title,
+            Days = days
+        };
+    }
+
+    public async Task<DailyValidationResponse> ValidateChallengeDayAsync(
+    ValidateChallengeDayRequest request,
+    CancellationToken cancellationToken = default)
+    {
+        var userId = _currentUserService.UserId;
+
+        if (userId is null || userId == Guid.Empty)
+        {
+            throw new UnauthorizedAccessException("Utilisateur non authentifié.");
+        }
+
+        if (request.ChallengeDayId == Guid.Empty)
+        {
+            throw new ArgumentException("Le jour du challenge est obligatoire.");
+        }
+
+        var userChallenge = await _dbContext.UserChallenges
+            .Include(x => x.Challenge)
+            .Where(x => x.UserId == userId.Value)
+            .OrderByDescending(x => x.JoinedAtUtc)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (userChallenge is null)
+        {
+            throw new InvalidOperationException("Aucun challenge rejoint pour cet utilisateur.");
+        }
+
+        var challengeDay = await _dbContext.ChallengeDays
+            .FirstOrDefaultAsync(
+                x => x.Id == request.ChallengeDayId && x.ChallengeId == userChallenge.ChallengeId,
+                cancellationToken);
+
+        if (challengeDay is null)
+        {
+            throw new InvalidOperationException("Jour de challenge introuvable pour cet utilisateur.");
+        }
+
+        var existingValidation = await _dbContext.DailyValidations
+            .FirstOrDefaultAsync(
+                x => x.UserId == userId.Value && x.ChallengeDayId == request.ChallengeDayId,
+                cancellationToken);
+
+        if (existingValidation is not null)
+        {
+            throw new InvalidOperationException("Cette journée a déjà été validée.");
+        }
+
+        var validation = new DailyValidation
+        {
+            Id = Guid.NewGuid(),
+            UserId = userId.Value,
+            ChallengeDayId = request.ChallengeDayId,
+            Status = Domain.Enums.ValidationStatus.Validated,
+            Note = string.IsNullOrWhiteSpace(request.Note) ? null : request.Note.Trim(),
+            SubmittedAtUtc = DateTime.UtcNow,
+            ValidatedAtUtc = DateTime.UtcNow
+        };
+
+        _dbContext.DailyValidations.Add(validation);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return new DailyValidationResponse
+        {
+            DailyValidationId = validation.Id,
+            ChallengeDayId = validation.ChallengeDayId,
+            Status = validation.Status.ToString(),
+            Note = validation.Note,
+            SubmittedAtUtc = validation.SubmittedAtUtc,
+            ValidatedAtUtc = validation.ValidatedAtUtc
+        };
+    }
 }

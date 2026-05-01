@@ -10,4 +10,11 @@ public interface IChallengeService
 
     Task<ChallengeSummaryResponse> GetCurrentChallengeAsync(
         CancellationToken cancellationToken = default);
+
+    Task<CurrentChallengeDaysResponse> GetMyChallengeDaysAsync(
+    CancellationToken cancellationToken = default);
+
+    Task<DailyValidationResponse> ValidateChallengeDayAsync(
+    ValidateChallengeDayRequest request,
+    CancellationToken cancellationToken = default);
 }
