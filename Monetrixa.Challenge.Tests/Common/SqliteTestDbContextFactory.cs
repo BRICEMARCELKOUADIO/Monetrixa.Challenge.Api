@@ -6,7 +6,7 @@ namespace Monetrixa.ChallengeApp.Tests.Common;
 
 public static class SqliteTestDbContextFactory
 {
-    public static (ChallengeDbContext DbContext, SqliteConnection Connection) Create()
+    public static (ChallengeDbContext DbContext, SqliteConnection Connection) Create() 
     {
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
