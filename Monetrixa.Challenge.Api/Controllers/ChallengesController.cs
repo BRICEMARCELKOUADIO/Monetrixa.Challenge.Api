@@ -33,4 +33,21 @@ public class ChallengesController : ControllerBase
         var response = await _challengeService.GetCurrentChallengeAsync(cancellationToken);
         return Ok(response);
     }
+
+    [HttpGet("current/days")]
+    public async Task<ActionResult<CurrentChallengeDaysResponse>> GetMyChallengeDays(
+    CancellationToken cancellationToken)
+    {
+        var response = await _challengeService.GetMyChallengeDaysAsync(cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpPost("days/validate")]
+    public async Task<ActionResult<DailyValidationResponse>> ValidateDay(
+    [FromBody] ValidateChallengeDayRequest request,
+    CancellationToken cancellationToken)
+    {
+        var response = await _challengeService.ValidateChallengeDayAsync(request, cancellationToken);
+        return Ok(response);
+    }
 }
