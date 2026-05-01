@@ -25,4 +25,12 @@ public class ChallengesController : ControllerBase
         var response = await _challengeService.JoinChallengeAsync(request, cancellationToken);
         return Ok(response);
     }
+
+    [HttpGet("current")]
+    public async Task<ActionResult<ChallengeSummaryResponse>> GetCurrent(
+    CancellationToken cancellationToken)
+    {
+        var response = await _challengeService.GetCurrentChallengeAsync(cancellationToken);
+        return Ok(response);
+    }
 }

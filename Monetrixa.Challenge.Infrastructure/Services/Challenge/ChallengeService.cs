@@ -78,4 +78,38 @@ public class ChallengeService : IChallengeService
             EndDateUtc = challenge.EndDateUtc
         };
     }
+
+    public async Task<ChallengeSummaryResponse> GetCurrentChallengeAsync(
+    CancellationToken cancellationToken = default)
+    {
+        var userId = _currentUserService.UserId;
+
+        if (userId is null || userId == Guid.Empty)
+        {
+            throw new UnauthorizedAccessException("Utilisateur non authentifié.");
+        }
+
+        var userChallenge = await _dbContext.UserChallenges
+            .Include(x => x.Challenge)
+            .Where(x => x.UserId == userId.Value)
+            .OrderByDescending(x => x.JoinedAtUtc)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (userChallenge is null)
+        {
+            throw new InvalidOperationException("Aucun challenge rejoint pour cet utilisateur.");
+        }
+
+        var challenge = userChallenge.Challenge;
+
+        return new ChallengeSummaryResponse
+        {
+            ChallengeId = challenge.Id,
+            Title = challenge.Title,
+            AccessCode = challenge.AccessCode,
+            Description = challenge.Description,
+            StartDateUtc = challenge.StartDateUtc,
+            EndDateUtc = challenge.EndDateUtc
+        };
+    }
 }

@@ -162,4 +162,103 @@ public class ChallengeServiceTests
             await dbContext.DisposeAsync();
         }
     }
+
+    [Fact]
+    public async Task GetCurrentChallengeAsync_Should_Return_Current_Challenge_When_User_Has_Joined()
+    {
+        var (dbContext, connection) = SqliteTestDbContextFactory.Create();
+
+        try
+        {
+            var userId = Guid.NewGuid();
+            var challengeId = Guid.NewGuid();
+
+            dbContext.Users.Add(new User
+            {
+                Id = userId,
+                FullName = "Brice Marcel",
+                Email = "brice@test.com",
+                PasswordHash = "hash",
+                Role = UserRole.Participant,
+                CreatedAtUtc = DateTime.UtcNow
+            });
+
+            dbContext.Challenges.Add(new Challenge
+            {
+                Id = challengeId,
+                Title = "Challenge 30 jours",
+                AccessCode = "START2026",
+                Description = "Test",
+                StartDateUtc = DateTime.UtcNow.Date,
+                EndDateUtc = DateTime.UtcNow.Date.AddDays(29),
+                CreatedAtUtc = DateTime.UtcNow
+            });
+
+            dbContext.UserChallenges.Add(new UserChallenge
+            {
+                Id = Guid.NewGuid(),
+                UserId = userId,
+                ChallengeId = challengeId,
+                JoinedAtUtc = DateTime.UtcNow,
+                Score = 0
+            });
+
+            await dbContext.SaveChangesAsync();
+
+            var currentUserServiceMock = new Mock<ICurrentUserService>();
+            currentUserServiceMock.Setup(x => x.UserId).Returns(userId);
+
+            var service = new ChallengeService(dbContext, currentUserServiceMock.Object);
+
+            var result = await service.GetCurrentChallengeAsync();
+
+            result.Should().NotBeNull();
+            result.ChallengeId.Should().Be(challengeId);
+            result.Title.Should().Be("Challenge 30 jours");
+            result.AccessCode.Should().Be("START2026");
+        }
+        finally
+        {
+            await connection.DisposeAsync();
+            await dbContext.DisposeAsync();
+        }
+    }
+
+    [Fact]
+    public async Task GetCurrentChallengeAsync_Should_Throw_When_User_Has_No_Challenge()
+    {
+        var (dbContext, connection) = SqliteTestDbContextFactory.Create();
+
+        try
+        {
+            var userId = Guid.NewGuid();
+
+            dbContext.Users.Add(new User
+            {
+                Id = userId,
+                FullName = "Brice Marcel",
+                Email = "brice@test.com",
+                PasswordHash = "hash",
+                Role = UserRole.Participant,
+                CreatedAtUtc = DateTime.UtcNow
+            });
+
+            await dbContext.SaveChangesAsync();
+
+            var currentUserServiceMock = new Mock<ICurrentUserService>();
+            currentUserServiceMock.Setup(x => x.UserId).Returns(userId);
+
+            var service = new ChallengeService(dbContext, currentUserServiceMock.Object);
+
+            var action = async () => await service.GetCurrentChallengeAsync();
+
+            await action.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("Aucun challenge rejoint pour cet utilisateur.");
+        }
+        finally
+        {
+            await connection.DisposeAsync();
+            await dbContext.DisposeAsync();
+        }
+    }
 }

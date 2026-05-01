@@ -7,4 +7,7 @@ public interface IChallengeService
     Task<ChallengeSummaryResponse> JoinChallengeAsync(
         JoinChallengeRequest request,
         CancellationToken cancellationToken = default);
+
+    Task<ChallengeSummaryResponse> GetCurrentChallengeAsync(
+        CancellationToken cancellationToken = default);
 }
