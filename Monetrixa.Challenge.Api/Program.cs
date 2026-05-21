@@ -89,6 +89,7 @@ if (app.Environment.IsDevelopment())
     var dbContext = scope.ServiceProvider.GetRequiredService<ChallengeDbContext>();
 
     await ChallengeSeeder.SeedAsync(dbContext);
+    await AdminUserSeeder.SeedAsync(dbContext);
 }
 
 app.Run();
