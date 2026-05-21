@@ -2,15 +2,18 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using Monetrixa.ChallengeApp.Application.Common.Options;
 using Monetrixa.ChallengeApp.Application.DTOs.Auth;
 using Monetrixa.ChallengeApp.Application.Interfaces.Auth;
 using Monetrixa.ChallengeApp.Application.Interfaces.Challenge;
 using Monetrixa.ChallengeApp.Application.Interfaces.Common;
+using Monetrixa.ChallengeApp.Application.Interfaces.Ideas;
 using Monetrixa.ChallengeApp.Infrastructure.Persistence;
 using Monetrixa.ChallengeApp.Infrastructure.Persistence.Seed;
 using Monetrixa.ChallengeApp.Infrastructure.Services.Auth;
 using Monetrixa.ChallengeApp.Infrastructure.Services.Challenge;
 using Monetrixa.ChallengeApp.Infrastructure.Services.Common;
+using Monetrixa.ChallengeApp.Infrastructure.Services.Ideas;
 using Scalar.AspNetCore;
 using System.Text;
 
@@ -55,6 +58,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.Configure<AiOptions>(
+    builder.Configuration.GetSection(AiOptions.SectionName));
+
+builder.Services.AddHttpClient<OpenAiIdeaGenerationAiService>((serviceProvider, client) =>
+{
+    var aiOptions = serviceProvider
+        .GetRequiredService<Microsoft.Extensions.Options.IOptions<AiOptions>>()
+        .Value;
+
+    client.BaseAddress = new Uri(aiOptions.BaseUrl);
+});
+
 
 builder.Services.AddAuthorization();
 
@@ -64,6 +79,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IChallengeService, ChallengeService>();
+builder.Services.AddScoped<IIdeaGenerationAiService, OpenAiIdeaGenerationAiService>();
+builder.Services.AddScoped<IAiProviderFactory, AiProviderFactory>();
+builder.Services.AddScoped<IIdeaGenerationService, IdeaGenerationService>();
 
 var app = builder.Build();
 
