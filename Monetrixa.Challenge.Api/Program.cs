@@ -81,7 +81,8 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IChallengeService, ChallengeService>();
 builder.Services.AddScoped<IIdeaGenerationAiService, OpenAiIdeaGenerationAiService>();
 builder.Services.AddScoped<IAiProviderFactory, AiProviderFactory>();
-builder.Services.AddScoped<IIdeaGenerationService, IdeaGenerationService>();
+//builder.Services.AddScoped<IIdeaGenerationService, IdeaGenerationService>(); 
+builder.Services.AddScoped<IIdeaGenerationAiService, FakeIdeaGenerationAiService>();
 
 var app = builder.Build();
 
